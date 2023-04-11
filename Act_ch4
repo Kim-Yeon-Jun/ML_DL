@@ -1,0 +1,39 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+data = pd.DataFrame({
+    'name' : ['A','B','C','D','E','F','G'],
+    'power' : [130, 250, 190, 300, 210, 220, 170],
+    'eff' : [16.3,10.2,11.1,7.1,12.1,13.2,14.2]})
+car_data = data.set_index('name')
+x = car_data['power']
+y = car_data['eff']
+def h(x, p):
+    return p[0] * x + p[1]
+learning_iteration = 1000
+learning_rate = 0.000005
+param = [-0.1,22]
+for i in range(learning_iteration):
+    if i % 200 == 0:
+        data.plot(kind = 'scatter', x = 'power', y = 'eff')
+        plt.plot([0,300], [h(0,param), h(300,param)], color = 'r')
+    error = ( h(x, param) - y )
+    param[0] -= learning_rate * ( error * x ).sum()
+    param[1] -= learning_rate * error.sum()
+    
+    
+    
+print(param) // 학습 후 param(기울기, y절편) 출력
+    
+y_predict = h(270, param) // 학습된 가설함수에 기존 데이터 입력 후 예측값 출력
+y_predict
+
+===========
+data = pd.DataFrame({
+    'name' : ['A','B','C','D','E','F'],
+    'power' : [130, 250, 190, 300, 210, 220],
+    'eff' : [16.3,10.2,11.1,7.1,12.1,13.2]})
+=> (power,eff) = (170, 14.2) 데이터 제거 후 학습과정 동일 실행
+y_predict = h(170, param)
+y_predict - 14.2 // 실제 값과 예측값의 차이 계산
+9.13733232958
